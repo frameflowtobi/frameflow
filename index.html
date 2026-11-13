@@ -1,4 +1,4 @@
-
+body{
 <!doctype html>
 <html lang="en">
 <head>
@@ -17,7 +17,6 @@
  --line:#293249;
 }
 *{box-sizing:border-box}
-body{
  margin:0;
  background:radial-gradient(circle at 80% 0,#222044 0,transparent 35%),var(--bg);
  color:#f4f6ff;
@@ -290,46 +289,4 @@ generate.addEventListener("click", async () => {
     : videoData?.url;
 
   if (!videoUrl) {
-   throw new Error("No video URL was returned by the AI model.");
-  }
-
-  const video = document.createElement("video");
-  video.src = videoUrl;
-  video.controls = true;
-  video.playsInline = true;
-
-  const download = document.createElement("a");
-  download.href = videoUrl;
-  download.download = "frameflow-video.mp4";
-  download.textContent = "Download your video";
-  download.style.display = "block";
-  download.style.marginTop = "12px";
-  download.style.color = "#b9b2ff";
-
-  preview.replaceChildren(video, download);
-
-  status.textContent = "Your video has been generated successfully!";
-
- } catch (error) {
-
-  console.error(error);
-
-  status.textContent =
-   "Generation failed: " + (error.message || "Please try again.");
-
-  preview.innerHTML =
-   "<p>Video generation failed. Please try again later.</p>";
-
- } finally {
-
-  generate.disabled = false;
-  generate.textContent = "Generate Video";
-
- }
-
-});
-
-</script>
-
-</body>
-</html>
+   throw new Error("No video URL was returned by the AI model
