@@ -1,292 +1,504 @@
-body{
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#10131d">
-<title>FrameFlow — AI Video Studio</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FrameFlow AI Video Studio</title>
 
 <style>
-:root{
- color-scheme:dark;
- --bg:#0b0e16;
- --panel:#141a28;
- --muted:#9aa6bd;
- --accent:#8b7cff;
- --line:#293249;
+* {
+  box-sizing: border-box;
 }
-*{box-sizing:border-box}
- margin:0;
- background:radial-gradient(circle at 80% 0,#222044 0,transparent 35%),var(--bg);
- color:#f4f6ff;
- font:16px/1.5 system-ui,Arial,sans-serif;
+
+body {
+  margin: 0;
+  padding: 24px 15px;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  color: #f5f5ff;
+  background: linear-gradient(135deg, #101329, #25133d);
 }
-header{
- padding:22px max(5vw,18px);
- border-bottom:1px solid var(--line);
- display:flex;
- justify-content:space-between;
- align-items:center;
+
+.container {
+  max-width: 650px;
+  margin: auto;
 }
-.logo{font-weight:800;font-size:21px}
-.tag{
- color:#b9b2ff;
- font-size:12px;
- border:1px solid #514a87;
- padding:5px 10px;
- border-radius:99px;
+
+header {
+  text-align: center;
+  margin-bottom: 28px;
 }
-main{max-width:1050px;margin:35px auto;padding:0 18px}
-.intro{text-align:center;margin-bottom:28px}
-.intro h1{font-size:clamp(28px,5vw,43px);line-height:1.12}
-.intro p,.muted{color:var(--muted)}
-.layout{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:18px;
+
+header h1 {
+  font-size: 30px;
+  margin-bottom: 8px;
 }
-.panel{
- background:rgba(20,26,40,.94);
- border:1px solid var(--line);
- border-radius:18px;
- padding:20px;
+
+header p {
+  color: #b8b8d0;
 }
-h2{font-size:17px;margin:0 0 15px}
-.drop{
- border:1.5px dashed #58617c;
- border-radius:14px;
- min-height:205px;
- display:grid;
- place-items:center;
- text-align:center;
- padding:15px;
- background:#0e1320;
- cursor:pointer;
- overflow:hidden;
+
+.panel {
+  background: #1b1d35;
+  border: 1px solid #373957;
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 20px;
 }
-.drop img{max-width:100%;max-height:280px;object-fit:contain}
-.drop strong{display:block}
-.muted{font-size:13px}
-textarea,select,input{
- width:100%;
- background:#0e1320;
- color:#f4f6ff;
- border:1px solid var(--line);
- border-radius:10px;
- padding:12px;
- font:inherit;
+
+h2 {
+  font-size: 19px;
+  margin-top: 0;
 }
-textarea{min-height:125px;resize:vertical}
-label{
- display:block;
- font-size:14px;
- margin:16px 0 7px;
- color:#dce1f1;
+
+label {
+  display: block;
+  margin: 18px 0 9px;
+  font-weight: bold;
 }
-button{
- width:100%;
- border:0;
- border-radius:11px;
- padding:13px 16px;
- background:linear-gradient(100deg,#8274ff,#aa70e8);
- color:white;
- font-weight:750;
- font-size:15px;
- margin-top:17px;
- cursor:pointer;
+
+.drop {
+  min-height: 210px;
+  border: 2px dashed #7774e8;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 15px;
+  cursor: pointer;
+  background: #242643;
+  overflow: hidden;
 }
-button:disabled{opacity:.6;cursor:not-allowed}
-.preview{
- min-height:280px;
- border-radius:14px;
- background:#0e1320;
- border:1px solid var(--line);
- display:grid;
- place-items:center;
- text-align:center;
- padding:18px;
+
+.drop.dragging {
+  border-color: #55e5bd;
+  background: #303354;
 }
-.preview video{width:100%;max-height:420px;border-radius:10px}
-.status{
- margin-top:13px;
- padding:12px;
- border-radius:10px;
- background:#25213d;
- color:#d9d4ff;
- font-size:13px;
+
+.drop strong {
+  display: block;
+  margin-bottom: 9px;
 }
-footer{
- text-align:center;
- color:var(--muted);
- font-size:12px;
- padding:25px;
+
+.muted {
+  display: block;
+  color: #aaaac3;
+  font-size: 13px;
 }
-@media(max-width:760px){
- .layout{grid-template-columns:1fr}
- main{margin:24px auto}
- .panel{padding:16px}
- header{padding:16px 18px}
+
+#imageInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+#imagePreview {
+  max-width: 100%;
+  max-height: 320px;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+textarea, select, input[type="password"] {
+  width: 100%;
+  padding: 13px;
+  color: white;
+  background: #111329;
+  border: 1px solid #454866;
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+textarea {
+  min-height: 115px;
+  resize: vertical;
+}
+
+button {
+  width: 100%;
+  border: none;
+  border-radius: 11px;
+  padding: 15px;
+  margin-top: 20px;
+  color: white;
+  background: linear-gradient(90deg, #7065ee, #a34ee8);
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.status {
+  margin-top: 16px;
+  padding: 12px;
+  background: #111329;
+  border-radius: 9px;
+  color: #c5c5e0;
+  overflow-wrap: anywhere;
+}
+
+.preview {
+  min-height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  color: #aaaac3;
+  text-align: center;
+}
+
+.preview video {
+  width: 100%;
+  max-height: 450px;
+  border-radius: 12px;
+  background: black;
+}
+
+.download {
+  display: inline-block;
+  padding: 12px 20px;
+  border-radius: 9px;
+  color: white;
+  background: #635bdb;
+  text-decoration: none;
+}
+
+footer {
+  text-align: center;
+  color: #9292ad;
+  padding: 15px;
+  font-size: 13px;
+}
+
+.small-note {
+  font-size: 12px;
+  color: #aaaac3;
+  line-height: 1.5;
+}
+
+@media(max-width: 480px) {
+  header h1 {
+    font-size: 24px;
+  }
+
+  .panel {
+    padding: 16px;
+  }
 }
 </style>
 </head>
 
 <body>
 
+<div class="container">
+
 <header>
- <div class="logo">✦ FrameFlow</div>
- <span class="tag">YOUR AI VIDEO STUDIO</span>
+  <h1>🎬 FrameFlow AI</h1>
+  <p>Turn your images into animated videos with AI.</p>
 </header>
-
-<main>
-
-<section class="intro">
- <h1>Turn a still image into a story.</h1>
- <p>Upload an image, describe the motion, and generate your AI video.</p>
-</section>
-
-<div class="layout">
 
 <section class="panel">
 
-<h2>1. Add your reference image</h2>
+<h2>1. Upload your image</h2>
 
 <label class="drop" for="imageInput" id="drop">
- <span id="uploadHint">
-  <strong>Tap to upload an image</strong>
-  <span class="muted">JPG, PNG or WebP</span>
- </span>
- <img id="imagePreview" alt="Image preview" hidden>
+  <span id="uploadHint">
+    <strong>📸 Tap here to upload an image</strong>
+    <span class="muted">JPG, PNG or WebP</span>
+    <span class="muted">You can also drag and drop</span>
+  </span>
+
+  <img id="imagePreview" alt="Image preview" hidden>
 </label>
 
-<input id="imageInput" type="file"
- accept="image/png,image/jpeg,image/webp" hidden>
+<input
+  id="imageInput"
+  type="file"
+  accept="image/png,image/jpeg,image/webp"
+>
 
 <label for="prompt">2. Describe your video</label>
 
-<textarea id="prompt"
- placeholder="Example: The ceiling fan slowly rotates, curtains move gently, and the camera slowly pushes towards the chalkboard."></textarea>
+<textarea
+  id="prompt"
+  placeholder="Example: The ceiling fan slowly rotates, curtains move gently, and the camera slowly pushes towards the chalkboard."
+></textarea>
 
 <label for="duration">3. Video duration</label>
 
 <select id="duration">
- <option value="3.5">3.5 seconds</option>
- <option value="5">5 seconds</option>
+  <option value="3.5">3.5 seconds</option>
+  <option value="5">5 seconds</option>
 </select>
 
-<button id="generate">Generate Video</button>
+<label for="hfToken">4. Hugging Face token</label>
+
+<input
+  id="hfToken"
+  type="password"
+  placeholder="Paste your hf_ token here"
+  autocomplete="off"
+>
+
+<p class="small-note">
+  Your token is used for this request only. Never put your token
+  directly into the HTML source code or share it with anyone.
+  This browser-based version is for private testing, not a secure
+  public deployment.
+</p>
+
+<button id="generate">✨ Generate Video</button>
 
 <div class="status" id="status" role="status">
- Ready to connect to the AI video generator.
+  Ready! Upload an image to begin.
 </div>
 
 </section>
 
 <section class="panel">
 
-<h2>4. Your video preview</h2>
+<h2>5. Your video preview</h2>
 
 <div class="preview" id="preview">
- <div>
-  <div style="font-size:38px">▶</div>
-  <strong>Your generated video will appear here</strong>
-  <p class="muted">Your AI video will appear here after generation.</p>
- </div>
+  Your generated video will appear here.
 </div>
 
 </section>
-</div>
-</main>
 
-<footer>FrameFlow AI Video Studio</footer>
+<footer>
+  FrameFlow AI Video Studio © 2026
+</footer>
+
+</div>
 
 <script type="module">
 
 import {
- Client,
- handle_file
+  Client,
+  handle_file
 } from "https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.min.js";
 
 const input = document.getElementById("imageInput");
 const img = document.getElementById("imagePreview");
 const hint = document.getElementById("uploadHint");
+const drop = document.getElementById("drop");
 const status = document.getElementById("status");
 const preview = document.getElementById("preview");
 const generate = document.getElementById("generate");
 
 let imageUrl = null;
 
+function showStatus(message) {
+  status.textContent = message;
+}
+
+function selectImage(file) {
+
+  if (!file) return;
+
+  const allowedTypes = [
+    "image/png",
+    "image/jpeg",
+    "image/webp"
+  ];
+
+  if (!allowedTypes.includes(file.type)) {
+    showStatus("Please select a JPG, PNG or WebP image.");
+    input.value = "";
+    return;
+  }
+
+  if (file.size > 15 * 1024 * 1024) {
+    showStatus("Image is too large. Please select an image under 15 MB.");
+    input.value = "";
+    return;
+  }
+
+  if (imageUrl) {
+    URL.revokeObjectURL(imageUrl);
+  }
+
+  imageUrl = URL.createObjectURL(file);
+
+  img.src = imageUrl;
+  img.hidden = false;
+  hint.hidden = true;
+
+  showStatus("✅ Image uploaded successfully!");
+
+}
+
 input.addEventListener("change", () => {
+  selectImage(input.files?.[0]);
+});
 
- const file = input.files?.[0];
- if (!file) return;
+drop.addEventListener("dragover", (event) => {
+  event.preventDefault();
+  drop.classList.add("dragging");
+});
 
- if (!["image/png","image/jpeg","image/webp"].includes(file.type)) {
-  status.textContent = "Please choose JPG, PNG or WebP.";
-  return;
- }
+drop.addEventListener("dragleave", () => {
+  drop.classList.remove("dragging");
+});
 
- if (imageUrl) URL.revokeObjectURL(imageUrl);
+drop.addEventListener("drop", (event) => {
+  event.preventDefault();
+  drop.classList.remove("dragging");
 
- imageUrl = URL.createObjectURL(file);
- img.src = imageUrl;
- img.hidden = false;
- hint.hidden = true;
+  const file = event.dataTransfer.files?.[0];
 
- status.textContent = "Image uploaded successfully. Add your prompt.";
+  if (!file) return;
 
+  try {
+    const transfer = new DataTransfer();
+    transfer.items.add(file);
+    input.files = transfer.files;
+  } catch (error) {
+    console.warn("Could not assign dropped file:", error);
+  }
+
+  selectImage(file);
 });
 
 generate.addEventListener("click", async () => {
 
- const file = input.files?.[0];
- const prompt = document.getElementById("prompt").value.trim();
- const duration = Number(document.getElementById("duration").value);
-
- if (!file) {
-  status.textContent = "Please upload an image first.";
-  return;
- }
-
- if (!prompt) {
-  status.textContent = "Please enter a video prompt.";
-  return;
- }
-
- generate.disabled = true;
- generate.textContent = "Generating...";
- status.textContent = "Connecting to Hugging Face AI. Please wait...";
-
- preview.innerHTML = "<p>Generating your video. This may take a while...</p>";
-
- try {
-
-  const app = await Client.connect(
-   "zerogpu-aoti/wan2-2-fp8da-aoti-faster"
+  const file = input.files?.[0];
+  const prompt = document.getElementById("prompt").value.trim();
+  const duration = Number(
+    document.getElementById("duration").value
   );
 
-  status.textContent = "Uploading image and generating video...";
+  const hfToken = document.getElementById("hfToken").value.trim();
 
-  const result = await app.predict("/generate_video", [
+  if (!file) {
+    showStatus("Please upload an image first.");
+    return;
+  }
 
-   handle_file(file),
-   prompt,
-   8,
-   "色调艳丽, 过曝, 静态, 细节模糊不清, 字幕, 风格, 作品, 画作, 画面, 静止, 整体发灰, 最差质量, 低质量, JPEG压缩残留, 丑陋的, 残缺的, 多余的手指, 画得不好的手部, 画得不好的脸部, 畸形的, 毁容的, 形态畸形的肢体, 手指融合, 静止不动的画面, 杂乱的背景, 三条腿, 背景人很多, 倒着走",
-   duration,
-   1,
-   1,
-   42,
-   true
+  if (!prompt) {
+    showStatus("Please enter a video prompt.");
+    return;
+  }
 
-  ]);
+  generate.disabled = true;
+  generate.textContent = "Generating...";
 
-  const videoData = result.data?.[0];
+  preview.textContent = "Your video is being generated. Please wait...";
 
-  const videoUrl =
-   typeof videoData === "string"
-    ? videoData
-    : videoData?.url;
+  try {
 
-  if (!videoUrl) {
-   throw new Error("No video URL was returned by the AI model
+    showStatus("Connecting to Hugging Face AI...");
+
+    const space = "zerogpu-aoti/wan2-2-fp8da-aoti-faster";
+
+    const app = hfToken
+      ? await Client.connect(space, { token: hfToken })
+      : await Client.connect(space);
+
+    showStatus("Uploading image and generating video...");
+
+    const result = await app.predict("/generate_video", [
+
+      handle_file(file),
+
+      prompt,
+
+      8,
+
+      "色调艳丽, 过曝, 静态, 细节模糊不清, 字幕, 风格, 作品, 画作, 画面, 静止, 整体发灰, 最差质量, 低质量, JPEG压缩残留, 丑陋的, 残缺的, 多余的手指, 画得不好的手部, 画得不好的脸部, 畸形的, 毁容的, 形态畸形的肢体, 手指融合, 静止不动的画面, 杂乱的背景, 三条腿, 背景人很多, 倒着走",
+
+      duration,
+
+      1,
+
+      1,
+
+      42,
+
+      true
+
+    ]);
+
+    const videoData = result.data?.[0];
+
+    const videoUrl =
+      typeof videoData === "string"
+        ? videoData
+        : videoData?.url || videoData?.video;
+
+    if (!videoUrl) {
+      throw new Error("The AI did not return a video URL.");
+    }
+
+    const video = document.createElement("video");
+
+    video.src = videoUrl;
+    video.controls = true;
+    video.playsInline = true;
+
+    const download = document.createElement("a");
+
+    download.href = videoUrl;
+    download.download = "frameflow-video.mp4";
+    download.className = "download";
+    download.textContent = "⬇ Download Video";
+
+    preview.replaceChildren(video, download);
+
+    showStatus("🎉 Your video is ready!");
+
+  } catch (error) {
+
+    console.error(error);
+
+    const message = error?.message || String(error);
+
+    if (
+      message.toLowerCase().includes("zerogpu") ||
+      message.toLowerCase().includes("quota") ||
+      message.toLowerCase().includes("limit")
+    ) {
+
+      showStatus(
+        "Hugging Face GPU limit reached. Authentication does not guarantee more GPU capacity. Please try again later."
+      );
+
+    } else if (
+      message.toLowerCase().includes("token") ||
+      message.toLowerCase().includes("unauthorized")
+    ) {
+
+      showStatus(
+        "Authentication failed. Check your Hugging Face token and permissions."
+      );
+
+    } else {
+
+      showStatus("Generation failed: " + message);
+
+    }
+
+    preview.textContent = "Video generation failed. Please try again.";
+
+  } finally {
+
+    generate.disabled = false;
+    generate.textContent = "✨ Generate Video";
+
+  }
+
+});
+
+</script>
+
+</body>
+</html>
