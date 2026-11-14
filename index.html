@@ -4,74 +4,103 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FrameFlow AI Video Studio</title>
+
+<title>FrameFlow AI Studio</title>
 
 <style>
 * {
   box-sizing: border-box;
 }
 
+:root {
+  --bg: #101329;
+  --panel: #1b1d35;
+  --field: #111329;
+  --border: #373957;
+  --purple: #7770f2;
+  --text: #f5f5ff;
+  --muted: #aaaac3;
+}
+
 body {
   margin: 0;
-  padding: 24px 15px;
   min-height: 100vh;
+  padding: 28px;
   font-family: Arial, sans-serif;
-  color: #f5f5ff;
+  color: var(--text);
   background: linear-gradient(135deg, #101329, #25133d);
 }
 
 .container {
-  max-width: 650px;
+  width: 100%;
+  max-width: 1440px;
   margin: auto;
 }
 
+/* HEADER */
+
 header {
-  text-align: center;
   margin-bottom: 28px;
 }
 
 header h1 {
-  font-size: 30px;
-  margin-bottom: 8px;
+  font-size: clamp(28px, 3vw, 38px);
+  margin: 0 0 8px;
 }
 
 header p {
   color: #b8b8d0;
+  margin: 0;
+}
+
+/* DESKTOP WORKSPACE */
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(360px, 0.95fr);
+  gap: 24px;
+  align-items: start;
 }
 
 .panel {
-  background: #1b1d35;
-  border: 1px solid #373957;
+  min-width: 0;
+  background: var(--panel);
+  border: 1px solid var(--border);
   border-radius: 18px;
-  padding: 22px;
+  padding: 26px;
   margin-bottom: 20px;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.12);
 }
 
 h2 {
   font-size: 19px;
-  margin-top: 0;
+  margin: 0 0 20px;
 }
 
 label {
   display: block;
-  margin: 18px 0 9px;
+  margin: 20px 0 9px;
   font-weight: bold;
 }
 
+/* IMAGE UPLOAD */
+
 .drop {
-  min-height: 210px;
+  min-height: 260px;
   border: 2px dashed #7774e8;
   border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 15px;
+  padding: 18px;
   cursor: pointer;
   background: #242643;
   overflow: hidden;
+  transition: 0.2s;
 }
 
+.drop:hover,
 .drop.dragging {
   border-color: #55e5bd;
   background: #303354;
@@ -84,8 +113,9 @@ label {
 
 .muted {
   display: block;
-  color: #aaaac3;
+  color: var(--muted);
   font-size: 13px;
+  margin-top: 5px;
 }
 
 #imageInput {
@@ -98,37 +128,66 @@ label {
 
 #imagePreview {
   max-width: 100%;
-  max-height: 320px;
+  max-height: 420px;
   object-fit: contain;
   border-radius: 10px;
 }
 
-textarea, select, input[type="password"] {
+/* INPUTS */
+
+textarea,
+select,
+input[type="password"] {
   width: 100%;
-  padding: 13px;
+  padding: 14px;
   color: white;
-  background: #111329;
+  background: var(--field);
   border: 1px solid #454866;
   border-radius: 10px;
   font-size: 15px;
+  outline: none;
+}
+
+textarea:focus,
+select:focus,
+input:focus {
+  border-color: var(--purple);
 }
 
 textarea {
-  min-height: 115px;
+  min-height: 145px;
   resize: vertical;
+  line-height: 1.5;
 }
+
+select {
+  cursor: pointer;
+}
+
+.small-note {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* GENERATE BUTTON */
 
 button {
   width: 100%;
   border: none;
   border-radius: 11px;
-  padding: 15px;
+  padding: 16px;
   margin-top: 20px;
   color: white;
   background: linear-gradient(90deg, #7065ee, #a34ee8);
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+button:hover {
+  opacity: 0.9;
 }
 
 button:disabled {
@@ -136,62 +195,129 @@ button:disabled {
   cursor: not-allowed;
 }
 
+/* STATUS */
+
 .status {
   margin-top: 16px;
-  padding: 12px;
-  background: #111329;
+  padding: 13px;
+  background: var(--field);
   border-radius: 9px;
   color: #c5c5e0;
   overflow-wrap: anywhere;
+  font-size: 14px;
 }
 
+/* VIDEO PREVIEW */
+
 .preview {
-  min-height: 150px;
+  min-height: 380px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 12px;
-  color: #aaaac3;
+  gap: 15px;
+  color: var(--muted);
   text-align: center;
+  background: #111329;
+  border: 1px solid #373957;
+  border-radius: 14px;
+  padding: 15px;
 }
 
 .preview video {
+  display: block;
   width: 100%;
-  max-height: 450px;
+  max-height: 680px;
   border-radius: 12px;
   background: black;
 }
 
 .download {
   display: inline-block;
-  padding: 12px 20px;
+  padding: 13px 22px;
   border-radius: 9px;
   color: white;
   background: #635bdb;
   text-decoration: none;
+  font-weight: bold;
 }
+
+/* FOOTER */
 
 footer {
   text-align: center;
   color: #9292ad;
-  padding: 15px;
+  padding: 20px;
   font-size: 13px;
 }
 
-.small-note {
-  font-size: 12px;
-  color: #aaaac3;
-  line-height: 1.5;
+/* TABLET */
+
+@media (max-width: 900px) {
+  body {
+    padding: 22px 18px;
+  }
+
+  .workspace {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  header {
+    text-align: center;
+  }
+
+  .preview {
+    min-height: 260px;
+  }
 }
 
-@media(max-width: 480px) {
+/* MOBILE */
+
+@media (max-width: 600px) {
+  body {
+    padding: 16px 12px;
+  }
+
+  header {
+    margin-bottom: 20px;
+  }
+
   header h1 {
-    font-size: 24px;
+    font-size: 25px;
+  }
+
+  header p {
+    font-size: 13px;
   }
 
   .panel {
     padding: 16px;
+    border-radius: 14px;
+  }
+
+  h2 {
+    font-size: 18px;
+  }
+
+  .drop {
+    min-height: 180px;
+  }
+
+  #imagePreview {
+    max-height: 280px;
+  }
+
+  textarea {
+    min-height: 120px;
+  }
+
+  .preview {
+    min-height: 200px;
+  }
+
+  .preview video {
+    max-height: 480px;
   }
 }
 </style>
@@ -206,11 +332,16 @@ footer {
   <p>Turn your images into animated videos with AI.</p>
 </header>
 
+<div class="workspace">
+
+<!-- LEFT: INPUT STUDIO -->
+
 <section class="panel">
 
 <h2>1. Upload your image</h2>
 
 <label class="drop" for="imageInput" id="drop">
+
   <span id="uploadHint">
     <strong>📸 Tap here to upload an image</strong>
     <span class="muted">JPG, PNG or WebP</span>
@@ -218,6 +349,7 @@ footer {
   </span>
 
   <img id="imagePreview" alt="Image preview" hidden>
+
 </label>
 
 <input
@@ -230,7 +362,7 @@ footer {
 
 <textarea
   id="prompt"
-  placeholder="Example: The ceiling fan slowly rotates, curtains move gently, and the camera slowly pushes towards the chalkboard."
+  placeholder="Describe how you want your image to move. Example: The curtains move gently, the fan rotates slowly, and the camera moves forward."
 ></textarea>
 
 <label for="duration">3. Video duration</label>
@@ -240,7 +372,7 @@ footer {
   <option value="5">5 seconds</option>
 </select>
 
-<label for="hfToken">4. Hugging Face token</label>
+<label for="hfToken">4. Hugging Face token (optional)</label>
 
 <input
   id="hfToken"
@@ -250,13 +382,15 @@ footer {
 >
 
 <p class="small-note">
-  Your token is used for this request only. Never put your token
-  directly into the HTML source code or share it with anyone.
-  This browser-based version is for private testing, not a secure
-  public deployment.
+  For private testing only. Never publish your token in HTML
+  or share it. Browser-based token entry is not secure for
+  a public website. Free GPU availability and queues are
+  controlled by Hugging Face.
 </p>
 
-<button id="generate">✨ Generate Video</button>
+<button id="generate">
+  ✨ Generate Video
+</button>
 
 <div class="status" id="status" role="status">
   Ready! Upload an image to begin.
@@ -264,15 +398,22 @@ footer {
 
 </section>
 
+<!-- RIGHT: VIDEO PREVIEW -->
+
 <section class="panel">
 
 <h2>5. Your video preview</h2>
 
 <div class="preview" id="preview">
-  Your generated video will appear here.
+  <div>
+    <div style="font-size:42px;">🎬</div>
+    Your generated video will appear here.
+  </div>
 </div>
 
 </section>
+
+</div>
 
 <footer>
   FrameFlow AI Video Studio © 2026
@@ -334,7 +475,6 @@ function selectImage(file) {
   hint.hidden = true;
 
   showStatus("✅ Image uploaded successfully!");
-
 }
 
 input.addEventListener("change", () => {
@@ -372,12 +512,18 @@ drop.addEventListener("drop", (event) => {
 generate.addEventListener("click", async () => {
 
   const file = input.files?.[0];
-  const prompt = document.getElementById("prompt").value.trim();
+
+  const prompt = document
+    .getElementById("prompt")
+    .value.trim();
+
   const duration = Number(
     document.getElementById("duration").value
   );
 
-  const hfToken = document.getElementById("hfToken").value.trim();
+  const hfToken = document
+    .getElementById("hfToken")
+    .value.trim();
 
   if (!file) {
     showStatus("Please upload an image first.");
@@ -392,19 +538,23 @@ generate.addEventListener("click", async () => {
   generate.disabled = true;
   generate.textContent = "Generating...";
 
-  preview.textContent = "Your video is being generated. Please wait...";
+  preview.textContent =
+    "Your video is being generated. Please wait...";
 
   try {
 
     showStatus("Connecting to Hugging Face AI...");
 
-    const space = "zerogpu-aoti/wan2-2-fp8da-aoti-faster";
+    const space =
+      "zerogpu-aoti/wan2-2-fp8da-aoti-faster";
 
     const app = hfToken
       ? await Client.connect(space, { token: hfToken })
       : await Client.connect(space);
 
-    showStatus("Uploading image and generating video...");
+    showStatus(
+      "Uploading image. Waiting for the AI GPU..."
+    );
 
     const result = await app.predict("/generate_video", [
 
@@ -436,7 +586,9 @@ generate.addEventListener("click", async () => {
         : videoData?.url || videoData?.video;
 
     if (!videoUrl) {
-      throw new Error("The AI did not return a video URL.");
+      throw new Error(
+        "The AI did not return a video URL."
+      );
     }
 
     const video = document.createElement("video");
@@ -460,21 +612,24 @@ generate.addEventListener("click", async () => {
 
     console.error(error);
 
-    const message = error?.message || String(error);
+    const message =
+      error?.message || String(error);
+
+    const lowerMessage = message.toLowerCase();
 
     if (
-      message.toLowerCase().includes("zerogpu") ||
-      message.toLowerCase().includes("quota") ||
-      message.toLowerCase().includes("limit")
+      lowerMessage.includes("zerogpu") ||
+      lowerMessage.includes("quota") ||
+      lowerMessage.includes("limit")
     ) {
 
       showStatus(
-        "Hugging Face GPU limit reached. Authentication does not guarantee more GPU capacity. Please try again later."
+        "Hugging Face GPU limit reached. Please try again later."
       );
 
     } else if (
-      message.toLowerCase().includes("token") ||
-      message.toLowerCase().includes("unauthorized")
+      lowerMessage.includes("token") ||
+      lowerMessage.includes("unauthorized")
     ) {
 
       showStatus(
@@ -483,11 +638,14 @@ generate.addEventListener("click", async () => {
 
     } else {
 
-      showStatus("Generation failed: " + message);
+      showStatus(
+        "Generation failed: " + message
+      );
 
     }
 
-    preview.textContent = "Video generation failed. Please try again.";
+    preview.textContent =
+      "Video generation failed. Please try again.";
 
   } finally {
 
